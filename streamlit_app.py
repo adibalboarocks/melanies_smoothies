@@ -2,6 +2,7 @@
 import streamlit as st
 # from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
+import requests
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie! :cup_with_straw:")
@@ -37,6 +38,9 @@ if ingredients_list:
     my_insert_stmt = """ insert into smoothies.public.orders(ingredients,name_on_order)
             values ('""" + ingredients_string +"""' , '"""+name_on_smoothie+ """')"""
     # st.write(my_insert_stmt)
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+st.text(fruityvice_response.json())
+
     time_to_insert=st.button('Submit button')
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
